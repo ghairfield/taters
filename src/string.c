@@ -56,21 +56,9 @@ str_destroy (String ** s)
   if (*s)
     {
       if ((*s)->str)
-	free ((*s)->str);
+        free ((*s)->str);
       free (*s);
-      *s = NULL;
     }
 
   *s = NULL;
-}
-
-int
-main ( /* int argc, char* argv[] */ )
-{
-  char test[] = "This is a test of the string thing.";
-  String *s = str_create (test, strlen (test));
-  fprintf (stdout, "We got back \"%s\"<S: %zu|C: %zu>\n", s->str, s->size,
-	   s->capacity);
-  str_destroy (&s);
-  return 0;
 }
