@@ -56,7 +56,7 @@ str_destroy (String ** s)
   if (*s)
     {
       if ((*s)->str)
-        free ((*s)->str);
+	free ((*s)->str);
       free (*s);
     }
 
