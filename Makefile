@@ -1,9 +1,12 @@
-.PHONY=str
+.PHONY: str
 
 CC=gcc 
-FLAGS=-Wall -Wextra -pedantic -O0 -g -std=gnu99
+FLAGS=-Wall -Wextra -pedantic -O0 -ggdb -std=gnu99
 OUTPUT=bin/
-SOURCE=src/
 
-str : src/string.c src/string.h
-	$(CC) $(FLAGS) -o $(OUTPUT)str $(SOURCE)string.c
+# Output for headers will change in the future
+vpath %.c src/
+vpath %.h src/
+
+str : string.c string.h
+	$(CC) $(FLAGS) -o $(OUTPUT)$@ $(SOURCE)$<
