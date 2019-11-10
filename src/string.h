@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
-
-#define S_INIT_SIZE 256		/* Size of the initial string */
+#define S_INIT_SIZE 128		/* Size of the initial string */
 #define S_GROW_SIZE 2		/* Growth multiplier          */
 
 /*
