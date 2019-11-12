@@ -14,13 +14,7 @@
  * Main string structure. The user is responsible for
  * the pointer. 
  */
-typedef struct String
-{
-  size_t capacity;		/* Capacity of str from 1 to N */
-  size_t size;			/* sizeof str                  */
-  char *str;			/* sizeof capacity             */
-} String;
-
+typedef struct String_t *String;
 
 /*
  * str_create Creates a string from the source parameter
@@ -30,7 +24,7 @@ typedef struct String
  * Returns:   A pointer to a String structure
  * @see       void str_delete(String *s)
  */
-String *str_create (const char *src, size_t sz);
+String str_create (const char *src, size_t sz);
 
 /*
  * str_destroy Deletes all the memory of the String parameter.
@@ -38,4 +32,7 @@ String *str_create (const char *src, size_t sz);
  * @s String to destroy
  * Returns: None
  */
-void str_destroy (String ** s);
+void str_destroy (struct String_t **s);
+
+
+void str_print (const struct String_t *s, FILE * f);

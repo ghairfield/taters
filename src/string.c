@@ -1,12 +1,19 @@
 #include "string.h"
 
+struct String_t
+{
+  size_t capacity;		/* Capacity of str from 1 to N */
+  size_t size;			/* sizeof str                  */
+  char *str;			/* sizeof capacity             */
+};
+
 /*
  * Helper functions.
  */
-static String *
+static struct String_t *
 s_init ()
 {
-  String *s = malloc (sizeof (String));
+  struct String_t *s = malloc (sizeof (struct String_t));
   if (!s)
     {
       /* Log error or something */
@@ -20,41 +27,28 @@ s_init ()
   return s;
 }
 
-/* To resize, we are taking the largest bit set in the current
- * string and dividing by 128^n until we find n. We are returning
- * the next bit + S_INIT_SIZE. This at worst case will double the
- * size of the current string _which could be bad, very bad_ or
- * it will grow the string ?on average? by current string * 1.5.
- * This is my goal, and will be monitoring this.
+/* 
+ * Calculate the growth size of the string.
+ * Other options:
+ *    sz *= 1.5
  *
- * Kind of a test to see how well this works. Hopefully we get 
- * some speed or memory savings?
  */
+
 static size_t
 resize_factor (size_t sz)
 {
   assert (sz > 0);
-  fprintf (stdout, "Resize starts: %zu ", sz);
-
-  int cnt = 0;
-  while (sz > 0)
-    {
-      sz = sz >> 8;		/* Multiples of 128 */
-      ++cnt;
-    }
-
-  fprintf (stdout, "  ends: %d\n", (1 << (cnt + 1)) + S_INIT_SIZE);
-  return (1 << (cnt + 1)) + S_INIT_SIZE;
+  return sz + S_INIT_SIZE;
 }
 
 
 static int
-copy_string (String * s, const char *src, size_t sz)
+copy_string (struct String_t *s, const char *src, size_t sz)
 {
   assert (s);
   if (s->capacity == 0)
     {
-      /* First time initilizing string, or previously destroyed.
+      /* First time initializing string, or previously destroyed.
        * We are assuming if s->capacity == 0 then s->str = NULL;
        */
       assert (!s->str);
@@ -62,10 +56,10 @@ copy_string (String * s, const char *src, size_t sz)
       int size = (sz > S_INIT_SIZE - 1) ? resize_factor (sz) : S_INIT_SIZE;
       s->str = malloc (sizeof (char) * size);
       if (!s->str)
-	{
-	  perror ("System out of memory.\n");
-	  return -1;
-	}
+        {
+          perror ("System out of memory.\n");
+          return -1;
+        }
       s->capacity = size;
     }
   else if (s->capacity < sz)
@@ -85,21 +79,21 @@ copy_string (String * s, const char *src, size_t sz)
       s->str = tmp;
     }
 
-  memcpy (s->str, src, sz);
+  strcpy (s->str, src);
   s->size = sz;
   return 0;
 }
 
-String *
+struct String_t *
 str_create (const char *src, size_t sz)
 {
   if (!src || sz <= 0)
     {
-      perror ("Can not initilize a string with size 0.\n");
+      perror ("Can not initialize a string with size 0.\n");
       return NULL;
     }
 
-  String *s = s_init ();
+  struct String_t *s = s_init ();
   if (!s)
     return NULL;		/* Error should of been logged. */
   if (copy_string (s, src, sz))
@@ -109,14 +103,20 @@ str_create (const char *src, size_t sz)
 }
 
 void
-str_destroy (String ** s)
+str_destroy (struct String_t **s)
 {
   if (*s)
     {
       if ((*s)->str)
-	free ((*s)->str);
+        free ((*s)->str);
       free (*s);
     }
 
   *s = NULL;
+}
+
+void
+str_print (const struct String_t *s, FILE * f)
+{
+  fprintf (f, "%s <sz: %zu|cap: %zu>\n", s->str, s->size, s->capacity);
 }
