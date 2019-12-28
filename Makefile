@@ -8,7 +8,7 @@ OUTPUT=bin/
 vpath list.% src/list/
 
 list.o : list.c list.h
-	$(CC) $(FLAGS) -c -o $(OUTPUT)$@ $<
+	$(CC) $(FLAGS) -o $(OUTPUT)$@ $^
 
 clean : 
 	rm $(OUTPUT)string.o $(OUTPUT)test.o $(OUTPUT)test
