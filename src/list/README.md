@@ -23,6 +23,7 @@ One must also destroy the list when done.
 ```
 
 Functionality:
+
 Function | Description | Return value
 ---------|-------------|-------------
 list\_init | Initilizes an empty list | List *
