@@ -24,7 +24,7 @@ One must also destroy the list when done.
 
 Functionality:
 Function | Description | Return value
--------------------------------------
+---------|-------------|-------------
 list\_init | Initilizes an empty list | List *
 list\_destroy | Distroys the contents of the list | None
 list\_push | Pushes an element on the front of the list | 0 success, !0 failure
